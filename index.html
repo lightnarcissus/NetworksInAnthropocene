@@ -86,7 +86,8 @@ input.radio:focus ~ label:before {
   box-shadow: 0 0 0 3px #999;
 }
 </style>
-<link rel="stylesheet" href="stylesheet-image-based.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 </head>
 <body>
   <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -94,7 +95,11 @@ input.radio:focus ~ label:before {
   <!-- I recommend you host this file on your own, since this will change without warning -->
   <script src="datamaps.world.hires.min.js"></script>
 
-  <div id="container1" style="position:relative;width:100%;height:100%;background:blue;">
+  <div id="container1" style="position:relative;width:100%;height:100%;background:#0283f4;">
+<div class="w3-container" style="position:absolute;top:100px">
+  
+  <div class="w3-panel w3-red">
+  <p>
   <div class="allradio" style="position:absolute;top:200px">
      <div class="radio1">
 <input type="radio" name="radio" id="radio1" class="radio" checked/>
@@ -114,6 +119,9 @@ input.radio:focus ~ label:before {
 <div> 
 <input type="radio" name="radio" id="radio4" class="radio"/>
 <label for="radio4">Fourth Option</label>
+</div>
+ </div>
+ </p>
 </div>
 </div>
   </div>
