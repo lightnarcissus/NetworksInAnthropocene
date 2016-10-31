@@ -259,11 +259,13 @@ election.bubbles(bombs, {
     }
 });
 
+console.log(election.options)
+
 function changeOptions(countryName,map)
 {
   console.log("it's " + countryName);
   ok=CAN
-  election.updateChoropleth({ok: {fillKey: 'circles'},})
+  election.updateChoropleth({CAN: {fillKey: 'circles'},})
   //console.log(document.getElementById("checktext1").text);
 }
      </script>
