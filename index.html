@@ -26,64 +26,20 @@ label {
   border-radius: 3px;
   border: 1px solid #D1D3D4
 }
-
-/* hide input */
-input.radio:empty {
-  margin-left: -999px;
+.radio-toolbar input[type="radio"] {
+    display:none;
 }
 
-/* style label */
-input.radio:empty ~ label {
-  position: relative;
-  float: left;
-  line-height: 2.5em;
-  text-indent: 3.25em;
-  margin-top: 2em;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.radio-toolbar label {
+    display:inline-block;
+    background-color:#ddd;
+    padding:4px 11px;
+    font-family:Arial;
+    font-size:16px;
 }
 
-input.radio:empty ~ label:before {
-  position: absolute;
-  display: block;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  content: '';
-  width: 2.5em;
-  background: #D1D3D4;
-  border-radius: 3px 0 0 3px;
-}
-
-/* toggle hover */
-input.radio:hover:not(:checked) ~ label:before {
-  content:'\2714';
-  text-indent: .9em;
-  color: #C2C2C2;
-}
-
-input.radio:hover:not(:checked) ~ label {
-  color: #888;
-}
-
-/* toggle on */
-input.radio:checked ~ label:before {
-  content:'\2714';
-  text-indent: .9em;
-  color: #9CE2AE;
-  background-color: #4DCB6D;
-}
-
-input.radio:checked ~ label {
-  color: #777;
-}
-
-/* radio focus */
-input.radio:focus ~ label:before {
-  box-shadow: 0 0 0 3px #999;
+.radio-toolbar input[type="radio"]:checked + label {
+    background-color:#bbb;
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -96,33 +52,17 @@ input.radio:focus ~ label:before {
   <script src="datamaps.world.hires.min.js"></script>
 
   <div id="container1" style="position:relative;width:100%;height:100%;background:#0283f4;">
-<div class="w3-container" style="position:absolute;top:100px">
-  
-  <div class="w3-panel w3-red" style="width:300px;height:300px;float:left;">
-  <p>
-  <div class="radio1">
-<input type="radio" name="radio" id="radio1" class="radio" checked/>
-<label for="radio1">First Option</label>
-</div>
+  <div class="radio-toolbar">  
+    <input type="radio" id="radio1" name="radios" value="all" checked>
+    <label for="radio1">Network</label>
 
-<div class="radio 2">
-<input type="radio" name="radio" id="radio2" class="radio"/>
-<label for="radio2">Second Option</label>
-</div>
+    <input type="radio" id="radio2" name="radios"value="false">
+    <label for="radio2">Open</label>
 
-<div class="radio3"> 
-<input type="radio" name="radio" id="radio3" class="radio"/>
-<label for="radio3">Third Option</label>
+    <input type="radio" id="radio3" name="radios" value="true">
+    <label for="radio3">Archived</label>
 </div>
-
-<div class="radio4"> 
-<input type="radio" name="radio" id="radio4" class="radio"/>
-<label for="radio4">Fourth Option</label>
- </div>
- </div>
- </p>
-</div>
-</div>
+  </div>
   </div>
   
   <!-- Add as many pattern definitions (defs) as you'd like, make sure to include an ID -->
@@ -264,9 +204,10 @@ console.log(election.options)
 function changeOptions(countryName,map)
 {
   console.log("it's " + countryName);
-  ok=CAN
-  election.updateChoropleth({CAN: {fillKey: 'circles'},})
-  //console.log(document.getElementById("checktext1").text);
+  document.getElementById('radio1text').innerHTML = "Attempt to expand the bandwidth";
+  document.getElementById('radio2text').innerHTML = "Attempt to expand the bandwidth";
+  document.getElementById('radio3text').innerHTML = "Attempt to expand the bandwidth";
+  document.getElementById('radio4text').innerHTML = "Attempt to expand the bandwidth";
 }
      </script>
 
