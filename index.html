@@ -7,18 +7,15 @@
 body{ width:100%; height:100%;
   font-family: sans-serif;
   font-weight: normal;
-  margin: 10px;
   color: #999;
   background-color: #eee;
 }
 
 form {
-  margin: 40px 0;
 }
 
 div {
   clear: both;
-  margin: 0 50px;
 }
 
 label {
@@ -41,6 +38,27 @@ label {
 .radio-toolbar input[type="radio"]:checked + label {
     background-color:#bbb;
 }
+
+.btn {
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  font-family: Georgia;
+  color: #ffffff;
+  font-size: 20px;
+  background: #000000;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #5eff00;
+  text-decoration: none;
+}
+
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
@@ -49,10 +67,9 @@ label {
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
   <!-- I recommend you host this file on your own, since this will change without warning -->
+  <div class="top-info" id="top-info">
   <script src="datamaps.world.hires.min.js"></script>
-
-  <div id="container1" style="position:relative;width:100%;height:100%;background:#0283f4;">
-  <div class="radio-toolbar">  
+ <div class="radio-toolbar" align="left">  
     <input type="radio" id="radio1" name="radios" value="all" checked>
     <label for="radio1">Network</label>
 
@@ -61,8 +78,15 @@ label {
 
     <input type="radio" id="radio3" name="radios" value="true">
     <label for="radio3">Archived</label>
+
+
 </div>
-  </div>
+  <div class="adv-btn" id="adv-btn" align="center">
+   <a class="btn" href="">Advance</a>
+   </div>
+</div>
+  <div id="container1" style="position:relative;width:100%;height:100%;background:#0283f4;">
+ 
   </div>
   
   <!-- Add as many pattern definitions (defs) as you'd like, make sure to include an ID -->
@@ -153,7 +177,48 @@ label {
                 //election.updateChoropleth({USA: {fillKey: 'circles'},})
                 changeOptions(geography.properties.iso,election);
             });
+        },
+        bubblesConfig: {
+        borderWidth: 2,
+        borderOpacity: 1,
+        borderColor: '#FFFFFF',
+        popupOnHover: true, // True to show the popup while hovering
+        radius: null,
+        popupTemplate: function(geography, data) { // This function should just return a string
+          return '<div class="hoverinfo"><strong>' + data.name + '</strong></div>';
+        },
+        fillOpacity: 0.75,
+        animate: true,
+        highlightOnHover: true,
+        highlightFillColor: '#FC8D59',
+        highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
+        highlightBorderWidth: 2,
+        highlightBorderOpacity: 1,
+        highlightFillOpacity: 0.85,
+        exitDelay: 100, // Milliseconds
+        key: JSON.stringify
+    },
+    arcConfig: {
+      strokeColor: 'red',
+      strokeWidth: 1,
+      arcSharpness: 1,
+      animationSpeed: 600, // Milliseconds
+      popupOnHover: false, // True to show the popup while hovering
+      popupTemplate: function(geography, data) { // This function should just return a string
+        // Case with latitude and longitude
+        if ( ( data.origin && data.destination ) && data.origin.latitude && data.origin.longitude && data.destination.latitude && data.destination.longitude ) {
+          return '<div class="hoverinfo"><strong>Arc</strong><br>Origin: ' + JSON.stringify(data.origin) + '<br>Destination: ' + JSON.stringify(data.destination) + '</div>';
         }
+        // Case with only country name
+        else if ( data.origin && data.destination ) {
+          return '<div class="hoverinfo"><strong>Arc</strong><br>' + data.origin + ' -> ' + data.destination + '</div>';
+        }
+        // Missing information
+        else {
+          return '';
+        }
+      }
+    }
       })
       var bombs = [{
         name: 'Joe 4',
@@ -189,6 +254,7 @@ label {
       }
     ];
     //draw bubbles for bombs
+
 election.bubbles(bombs, {
     popupTemplate: function (geo, data) {
             return ['<div class="hoverinfo">' +  data.name,
@@ -198,6 +264,65 @@ election.bubbles(bombs, {
             '</div>'].join('');
     }
 });
+
+
+// Arcs coordinates can be specified explicitly with latitude/longtitude,
+// or just the geographic center of the state/country.
+
+election.arc([
+  {
+    origin: 'CAN',
+    destination: 'IND'
+  },
+  {
+    origin: 'CHN',
+    destination: 'RUS'
+  },
+  {
+    origin: 'BRA',
+    destination: 'USA',
+      options: {
+        strokeWidth: 2,
+        strokeColor: 'rgba(100, 10, 200, 0.4)',
+        greatArc: true
+      }
+  },
+  {
+      origin: {
+          latitude: 40.639722,
+          longitude: -73.778889
+      },
+      destination: {
+          latitude: 37.618889,
+          longitude: -122.375
+      }
+  },
+  {
+      origin: {
+          latitude: 30.194444,
+          longitude: -97.67
+      },
+      destination: {
+          latitude: 25.793333,
+          longitude: -80.290556
+      },
+      options: {
+        strokeWidth: 2,
+        strokeColor: 'rgba(100, 10, 200, 0.4)',
+        greatArc: true
+      }
+  },
+  {
+      origin: {
+          latitude: 39.861667,
+          longitude: -104.673056
+      },
+      destination: {
+          latitude: 35.877778,
+          longitude: -78.7875
+      }
+  }
+],  {strokeWidth: 1, arcSharpness: 1.4});
 
 console.log(election.options)
 
@@ -209,8 +334,18 @@ function changeOptions(countryName,map)
   document.getElementById('radio3text').innerHTML = "Attempt to expand the bandwidth";
   document.getElementById('radio4text').innerHTML = "Attempt to expand the bandwidth";
 }
-     </script>
 
 
+//resizing 
+window.addEventListener('resize', function() {
+        election.resize();
+    });
+
+election.updateChoropleth({
+   USA: '#0283f4',
+   CAN: '#0283f4',
+   CHN: '#0283f4'
+});
    
+     </script>
 </body>
