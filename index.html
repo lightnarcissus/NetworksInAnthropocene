@@ -18,11 +18,73 @@ div {
   clear: both;
 }
 
+
 label {
   width: 200px;
   border-radius: 3px;
   border: 1px solid #D1D3D4
 }
+
+/* hide input */
+input.radio:empty {
+  margin-left: -999px;
+}
+
+/* style label */
+input.radio:empty ~ label {
+  position: relative;
+  float: left;
+  line-height: 2.5em;
+  text-indent: 3.25em;
+  margin-top: 2em;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input.radio:empty ~ label:before {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 2.5em;
+  background: #D1D3D4;
+  border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+input.radio:hover:not(:checked) ~ label:before {
+  content:'\2714';
+  text-indent: .9em;
+  color: #C2C2C2;
+}
+
+input.radio:hover:not(:checked) ~ label {
+  color: #888;
+}
+
+/* toggle on */
+input.radio:checked ~ label:before {
+  content:'\2714';
+  text-indent: .9em;
+  color: #9CE2AE;
+  background-color: #4DCB6D;
+}
+
+input.radio:checked ~ label {
+  color: #777;
+}
+
+/* radio focus */
+input.radio:focus ~ label:before {
+  box-shadow: 0 0 0 3px #999;
+}
+
+
 .radio-toolbar input[type="radio"] {
     display:none;
 }
@@ -65,8 +127,19 @@ div.btn:hover {
   background: #5eff00;
   text-decoration: none;
 }
+div.turn-count
+{
+
+  font-family: 'Roboto Mono', sans-serif;
+  text-align: right;
+  font-size: 60px;
 
 </style>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="datamaps.world.hires.min.js"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 </head>
@@ -75,21 +148,39 @@ div.btn:hover {
 <div class="title" id="title" align="center">
 Networks in Anthropocene
 </div>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://d3js.org/topojson.v1.min.js"></script>
   <!-- I recommend you host this file on your own, since this will change without warning -->
-  <div class="top-info" id="top-info">
-  <script src="datamaps.world.hires.min.js"></script>
+  <div class="top-info" id="top-info" style="position:relative;">
  
-  <div class="btn" id="btn" align="center" style="width:10%;height:10%;" onclick="advanceTurn();">
+  <div class="btn" id="btn" align="center" style="position:relative;left:45%;width:10%;height:10%;" onclick="advanceTurn();">
    ADVANCE
    </div>
-   <div class="turn-count" id="turn-count" align="right">
+   <div class="turn-count" id="turn-count" style="position:absolute;top:0px;right:100px;width:10%;height:10%;">
    2016
    </div>
+
+   <div id="all-options" style="position:absolute;top:-20px;left:150px;width:100%;height:100%;">
+      <div style="position:absolute;top:-40px;left:-120px;">
+<input type="radio" name="option1" id="option1" class="radio" checked/ onclick="EngageChoice(1)">
+<label for="option1" id="opt1">First Option</label>
+</div>
+<div style="position:absolute;top:-40px;left:120px;">
+<input type="radio" name="option1" id="option2" class="radio"/ onclick="EngageChoice(2)">
+<label for="option2" id="opt2">Second Option</label>
+</div>
+
+<div style="position:absolute;top:10px;left:-120px;">
+<input type="radio" name="option1" id="option3" class="radio"/ onclick="EngageChoice(3)">
+<label for="option3" id="opt3">Third Option</label>
+</div>
+
+<div style="position:absolute;top:10px;left:120px;">
+<input type="radio" name="option1" id="option4" class="radio"/ onclick="EngageChoice(4)">
+<label for="option4" id="opt4">Fourth Option</label>
+</div>
+</div>  
 </div>
 <div id="main-container" style="position:absolute;width:100%;height:100%;">
- <div class="radio-toolbar" align="left">  
+ <div class="radio-toolbar" align="center" style="width:100%;height:auto;">  
     <input type="radio" id="radio1" name="radios" value="all" checked onclick="ShowNetwork();">
     <label for="radio1">Network</label>
 
@@ -700,6 +791,9 @@ var netdata= [['ABW',88.661226932496],
 
 var carbon_dataset = {};
 var net_dataset={};
+selectionString="";
+
+var currentSelection=0; //0 for none, 1 for network, 2 for emissions and 3 for consumption
 
 var onlyValues = carbondata.map(function(obj){ return obj[1]; });
     var minValue = Math.min.apply(null, onlyValues),
@@ -808,7 +902,7 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
     geographyConfig: {
             popupTemplate: function(geo, data) {
                 return ['<div class="hoverinfo"><strong>',
-                        'Network Connectivity in ' + geo.properties.name,
+                        selectionString + geo.properties.name,
                         ': ' + data.numberOfThings,
                         '</strong></div>'].join('');
             }
@@ -954,10 +1048,10 @@ var turnCount=2016;
 function changeOptions(countryName,map)
 {
   console.log("it's " + countryName);
-  document.getElementById('radio1text').innerHTML = "Attempt to expand the bandwidth";
-  document.getElementById('radio2text').innerHTML = "Attempt to expand the bandwidth";
-  document.getElementById('radio3text').innerHTML = "Attempt to expand the bandwidth";
-  document.getElementById('radio4text').innerHTML = "Attempt to expand the bandwidth";
+  console.log( document.getElementById('option1').children );
+ document.getElementById('opt1').innerHTML = "Attempt to expand the bandwidth";
+  document.getElementById('opt2').innerHTML = "Attempt to expand the bandwidth";
+
 }
 
 function advanceTurn()
@@ -974,22 +1068,22 @@ function updateDataValues()
   console.log("nice");
   var usa=Math.floor((Math.random() * 100) + 1);
   var can=Math.floor((Math.random() * 100) + 1);
-  election.updateChoropleth({
-    USA : {numberOfThings:usa ,fillColor: paletteScale(usa)}, 
-    CAN : {numberOfThings:can, fillColor: paletteScale(can)}
-    });
+  net_dataset['USA'].numberOfThings=usa;
 
 }
 
 function ShowNetwork()
 {
+  currentSelection=1;
+  selectionString='Network Connectivity in ';
 election.updateChoropleth(null, {reset: true});
  election.updateChoropleth(net_dataset);
 }
 
 function ShowEmissions()
 {
-
+currentSelection=2;
+selectionString='Greenhouse Emissions from ';
 election.updateChoropleth(null, {reset: true});
 election.updateChoropleth(carbon_dataset);
 }
@@ -999,8 +1093,17 @@ function ShowConsumption()
 
 }
 
-election.legend();
-
+function EngageChoice(choice)
+{
+  if(choice==1)
+  {
+    console.log("1st");
+  }
+  else if(choice==2)
+  {
+    console.log("2nd");
+  }
+}
 //resizing 
 window.addEventListener('resize', function() {
         election.resize();
