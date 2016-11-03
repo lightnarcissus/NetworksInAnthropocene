@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <head>
+<title>
+Networks in Anthropocene
+</title>
 <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Quicksand|Roboto+Mono" rel="stylesheet"> 
 <meta charset="utf-8">
 <style type="text/css">
@@ -20,8 +23,8 @@ div {
 
 
 label {
-  width: 260px;
-  font-size:10px;
+  width: 280px;
+  font-size:11px;
   border-radius: 3px;
   border: 1px solid #D1D3D4
 }
@@ -61,11 +64,11 @@ input.radio:empty ~ label:before {
 input.radio:hover:not(:checked) ~ label:before {
   content:'\2714';
   text-indent: .9em;
-  color: #C2C2C2;
+  color: #000000;
 }
 
 input.radio:hover:not(:checked) ~ label {
-  color: #888;
+  color: #000000;
 }
 
 /* toggle on */
@@ -77,7 +80,6 @@ input.radio:checked ~ label:before {
 }
 
 input.radio:checked ~ label {
-  color: #777;
   background-color: #000000;
 }
 
@@ -106,12 +108,12 @@ div.news-text
     display:inline-block;
     background-color:#ddd;
     padding:4px 11px;
-    font-family:Arial;
-    font-size:16px;
+    font-family:'Quicksand',sans-serif;
+    font-size:20px;
 }
 
 .radio-toolbar input[type="radio"]:checked + label {
-    background-color:#bbb;
+    background-color:#000000;
 }
 
 div.title
@@ -169,8 +171,9 @@ Networks in Anthropocene
    ADVANCE
    </div>
 
-    <div class="news-text" id="news-text" style="position:absolute;top:-50px;">
+    <div class="news-text" id="news-text" style="position:absolute;top:-80px;left: 20PX;">
  <p>
+Highlights of the Year
  <ul>
  <li>AT&T and Time Warner merger</li>
 <li>Russia and US relations continue to tense over Syria</li>
@@ -186,11 +189,6 @@ Networks in Anthropocene
 
     <input type="radio" id="radio2" name="radios"value="false" onclick="ShowEmissions();">
     <label for="radio2">Emissions</label>
-
-    <input type="radio" id="radio3" name="radios" value="true" onclick="ShowConsumption();">
-    <label for="radio3">Consumption</label>
-
-
 </div>
 
   <div id="container1" style="position:relative;width:100%;height:100%;background:#0283f4;">
@@ -204,22 +202,17 @@ Networks in Anthropocene
 <input type="radio" name="option1" id="option1" class="radio" checked/ onclick="EngageChoice(1)">
 <label for="option1" id="opt1">First Option</label>
 </div>
-<div style="position:absolute;top:50px;left:-150px;">
+<div style="position:absolute;top:70px;left:-150px;">
 <input type="radio" name="option1" id="option2" class="radio"/ onclick="EngageChoice(2)">
 <label for="option2" id="opt2">Second Option</label>
 </div>
 
-<div style="position:absolute;top:80px;left:-150px;">
+<div style="position:absolute;top:120px;left:-150px;">
 <input type="radio" name="option1" id="option3" class="radio"/ onclick="EngageChoice(3)">
 <label for="option3" id="opt3">Third Option</label>
 </div>
-
-<div style="position:absolute;top:110px;left:-150px;">
-<input type="radio" name="option1" id="option4" class="radio"/ onclick="EngageChoice(4)">
-<label for="option4" id="opt4">Fourth Option</label>
 </div>
-</div>
-<div class="desc-text" id="opt-desc" align="center" style="position:absolute;top:160px;width:100%;height:260px;opacity:1;">
+<div class="desc-text" id="opt-desc" align="center" style="color:#000000;position:absolute;top:160px;width:100%;height:260px;opacity:1;">
 SOMETHING HAPPENS OKAYSOMETHING HAPPENS OKAYSOMETHING HAPPENS OKAYSOMETHING HAPPENS OKAY
 </div>
   </div>
@@ -830,7 +823,7 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
             maxValue = Math.max.apply(null, onlyValues);
     // create color palette function
     // color can be whatever you wish
-    var paletteScale = d3.scale.linear()
+    var paletteScaleCarbon = d3.scale.linear()
             .domain([1,12454711])
             .range(["#EFEFFF","#02386F"]); // blue color
     // fill dataset in appropriate format
@@ -838,7 +831,7 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
         // item example value ["USA", 70]
         var iso = item[0],
                 value = item[1];
-        carbon_dataset[iso] = { numberOfThings: value, fillColor: paletteScale(value) };
+        carbon_dataset[iso] = { numberOfThings: value, fillColor: paletteScaleCarbon(value) };
     });
 
     var someVals = netdata.map(function(obj){ return obj[1]; });
@@ -941,9 +934,7 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
       var bombs = [{
         name: 'Joe 4',
         radius: 25,
-        yield: 400,
         country: 'USSR',
-        fillKey: 'RUS',
         significance: 'First fusion weapon test by the USSR (not "staged")',
         date: '1953-08-12',
         latitude: 50.07,
@@ -951,18 +942,14 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
       },{
         name: 'RDS-37',
         radius: 40,
-        yield: 1600,
         country: 'USSR',
-        fillKey: 'RUS',
         significance: 'First "staged" thermonuclear weapon test by the USSR (deployable)',
-        date: '1955-11-22',
         latitude: 50.07,
         longitude: 78.43
 
       },{
         name: 'Tsar Bomba',
         radius: 75,
-        yield: 50000,
         country: 'USSR',
         fillKey: 'RUS',
         significance: 'Largest thermonuclear weapon ever tested—scaled down from its initial 100 Mt design by 50%',
@@ -971,6 +958,18 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
         longitude: 54.5854
       }
     ];
+    var notbombs = [];
+
+    /*{
+        name: 'Joe 4',
+        radius: 25,
+        country: 'USA',
+        significance: 'First fusion weapon test by the USSR (not "staged")',
+        date: '1999-08-12',
+        latitude: 50.07,
+        longitude: 78.43
+      }
+      */
     //draw bubbles for bombs
 
 election.bubbles(bombs, {
@@ -986,8 +985,7 @@ election.bubbles(bombs, {
 
 // Arcs coordinates can be specified explicitly with latitude/longtitude,
 // or just the geographic center of the state/country.
-
-election.arc([
+var cables=[
   {
     origin: 'CAN',
     destination: 'IND'
@@ -1150,24 +1148,66 @@ election.arc([
   },
   
 
-],  {strokeWidth: 1, arcSharpness: 1.4}
+];
+election.arc(cables,  {strokeWidth: 1, arcSharpness: 1.4}
 
 );
 
 console.log(election.options);
-var turnCount=2016;
+var turnCount=2017;
 function changeOptions(countryName,map)
 {
   console.log("it's " + countryName);
   console.log( document.getElementById('option1').children );
-  DisplayChoices();
 
 }
 
+
+//net dataset size is 265
+function globalEffect(factor)
+{
+  var i=0;
+  var paletteScale = d3.scale.linear()
+            .domain([2,99])
+            .range(["#EFEFFF","#02386F"]); 
+  for (key in net_dataset)
+  {
+    //console.log(key);
+
+    var newValue=net_dataset[key].numberOfThings*factor;
+    if(newValue<100)
+    {
+    net_dataset[key].numberOfThings=newValue;
+    net_dataset[key].fillColor=paletteScale(newValue);
+    }
+
+  }
+
+  for (key in carbon_dataset)
+  {
+    //console.log(key);
+
+    var newValue=carbon_dataset[key].numberOfThings*factor;
+
+    carbon_dataset[key].numberOfThings=newValue;
+    carbon_dataset[key].fillColor=paletteScaleCarbon(newValue);
+
+  }
+    ShowNetwork();
+}
 function advanceTurn()
 {
 
   turnCount++;
+  election.bubbles(notbombs,{
+    popupTemplate: function (geo, data) {
+            return ['<div class="hoverinfo">' +  data.name,
+            '<br/>Country: ' +  data.country + '',
+            '<br/>Date: ' +  data.date + '',
+            '</div>'].join('');
+    }
+});
+
   console.log(turnCount);
   document.getElementById("turn-count").innerHTML=turnCount;
   updateDataValues();
@@ -1175,12 +1215,42 @@ function advanceTurn()
 
 function updateDataValues()
 {
+  var factor=1*Math.random();
+  //update arcs and cables
+  updateBubbles();
+  updateCables();
+ globalEffect(1.1);
+}
 
-  console.log("nice");
-  var usa=Math.floor((Math.random() * 100) + 1);
-  var can=Math.floor((Math.random() * 100) + 1);
-  net_dataset['USA'].numberOfThings=usa;
+function updateBubbles()
+{
+  console.log("updating bubbles");
+  //create a sample arc to push first
+  notbombs.push(
+{
+        name: 'Joe 4',
+        radius: 125,
+        significance: 'Something happened heere',
+        latitude: 25.07,
+        longitude: 58.43
+      });
 
+  //then update it
+  election.bubbles(notbombs,{
+    popupTemplate: function (geo, data) {
+            return ['<div class="hoverinfo">' +  data.name,
+            '<br/>Event:' + data.significance + '',
+            '</div>'].join('');
+    }
+});
+}
+
+function updateCables()
+{
+
+  //create a sample cable to push first
+  cables.push({ origin:'CHN', destination:'ZAF'});
+  election.arc(cables);
 }
 
 function ShowNetwork()
@@ -1189,60 +1259,46 @@ function ShowNetwork()
   selectionString='Network Connectivity in ';
 election.updateChoropleth(null, {reset: true});
  election.updateChoropleth(net_dataset);
- DisplayChoices(1);
+ DisplayChoices();
 }
-
 function ShowEmissions()
 {
 currentSelection=2;
 selectionString='Greenhouse Emissions from ';
 election.updateChoropleth(null, {reset: true});
 election.updateChoropleth(carbon_dataset);
- DisplayChoices(2);
+ DisplayChoices();
 }
 
-function ShowConsumption()
-{
- DisplayChoices(3);
-}
+var choices=["Hasten as-is 5G Implementation","Exploit unused and unlicensed spectrum","Phase out coal mines",
+"Provide subsidies to Calyx and non-profit ISPs","Pass Carbon Tax","Improve frequency reuse"];
 
-function DisplayChoices(dataview)
+var choiceDesc=["Currently, the 5G rollout will not be fully complete until 2030 globally. This will make sure it is put on priority-track.","5G will increase energy usage 10x globally, so it might be a wiser idea to exploit the unlicensed spectrum and scaffold current Wi-Fi spectrum devices to 5G than changing drastically.","Stop search for any more coal and eventually phase out the mines over few decades at risk of increasing dissent among those whose livelihood depend upon coal industry",
+"To promote public-interest work, provide subsidies to Calyx and similar ISPs managed by non-profits","Tax industries and motorists causing carbon emissions, it will likely reduce emissions at cost of economic unrest.","Reduce the transmitter-receiver distance by constructing Ultra Dense Networks(UDNs) and allowing Device2Device communications to reduce inter-cell interference",
+]
+function DisplayChoices()
 {
-if(dataview==1)
-{
- document.getElementById('opt1').innerHTML = "Hasten as-is 5G Implementation";
-  document.getElementById('opt2').innerHTML = "Exploit unused and unlicensed spectrum";
-  document.getElementById('opt3').innerHTML = "Enhance spectral efficiency";
-  document.getElementById('opt4').innerHTML = "Improve frequency reuse";
-}
-else if(dataview==2)
-{
- document.getElementById('opt1').innerHTML = "Stop any coal mining";
-  document.getElementById('opt2').innerHTML = "";
-  document.getElementById('opt3').innerHTML = "Enhance spectral efficiency";
-  document.getElementById('opt4').innerHTML = "Improve frequency reuse";
-}
+ document.getElementById('opt1').innerHTML = choices[(turnCount-2017)*3];
+  document.getElementById('opt2').innerHTML =choices[(turnCount-2017)*3+1];
+  document.getElementById('opt3').innerHTML =choices[(turnCount-2017)*3+2];
 }
 
 function EngageChoice(choice)
 {
+  console.log(choices[2]);
   if(choice==1)
   {
     console.log("1st");
-     document.getElementById('opt-desc').innerHTML = "Currently, the 5G rollout will not be fully complete until 2030 globally. This will make sure it is put on priority-track."
+     document.getElementById('opt-desc').innerHTML = choiceDesc[(turnCount-2017)*3];
   }
   else if(choice==2)
   {
     console.log("2nd");
-    document.getElementById('opt-desc').innerHTML = "5G will increase energy usage 10x globally, so it might be a wiser idea to exploit the unlicensed spectrum and scaffold current Wi-Fi spectrum devices to 5G than changing drastically."
+    document.getElementById('opt-desc').innerHTML = choiceDesc[(turnCount-2017)*3+1];
   }
   else if(choice==3)
   {
-document.getElementById('opt-desc').innerHTML = "Deploy massive number of antennas to allow M-MIMO(Multiple Input Multiple Output). Potential multiplexing while escalating power consumption of Radio Frequency chains"
-  }
-  else if(choice==4)
-  {
-    document.getElementById('opt-desc').innerHTML = "Reduce the transmitter-receiver distance by constructing Ultra Dense Networks(UDNs) and allowing Device2Device communications to reduce inter-cell interference"
+document.getElementById('opt-desc').innerHTML = choiceDesc[(turnCount-2017)*3+2];
   }
 }
 //resizing 
