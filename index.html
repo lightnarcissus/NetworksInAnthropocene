@@ -3,7 +3,7 @@
 <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Quicksand|Roboto+Mono" rel="stylesheet"> 
 <meta charset="utf-8">
 <style type="text/css">
-	html{ width:100%; height:100%; }
+  html{ width:100%; height:100%; }
 body{ width:100%; height:100%;
   font-family: 'Quicksand', sans-serif;
   font-weight: normal;
@@ -20,7 +20,8 @@ div {
 
 
 label {
-  width: 200px;
+  width: 260px;
+  font-size:10px;
   border-radius: 3px;
   border: 1px solid #D1D3D4
 }
@@ -77,6 +78,7 @@ input.radio:checked ~ label:before {
 
 input.radio:checked ~ label {
   color: #777;
+  background-color: #000000;
 }
 
 /* radio focus */
@@ -84,9 +86,20 @@ input.radio:focus ~ label:before {
   box-shadow: 0 0 0 3px #999;
 }
 
-
+div.desc-text
+{
+float:left;
+background-color: #FFFFFF;
+}
 .radio-toolbar input[type="radio"] {
     display:none;
+}
+
+div.news-text
+{
+  float:left;
+  font-size:20px;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .radio-toolbar label {
@@ -133,6 +146,7 @@ div.turn-count
   font-family: 'Roboto Mono', sans-serif;
   text-align: right;
   font-size: 60px;
+  color:#FFFFFF;
 
 </style>
 
@@ -150,34 +164,20 @@ Networks in Anthropocene
 </div>
   <!-- I recommend you host this file on your own, since this will change without warning -->
   <div class="top-info" id="top-info" style="position:relative;">
- 
+
   <div class="btn" id="btn" align="center" style="position:relative;left:45%;width:10%;height:10%;" onclick="advanceTurn();">
    ADVANCE
    </div>
-   <div class="turn-count" id="turn-count" style="position:absolute;top:0px;right:100px;width:10%;height:10%;">
-   2016
-   </div>
 
-   <div id="all-options" style="position:absolute;top:-20px;left:150px;width:100%;height:100%;">
-      <div style="position:absolute;top:-40px;left:-120px;">
-<input type="radio" name="option1" id="option1" class="radio" checked/ onclick="EngageChoice(1)">
-<label for="option1" id="opt1">First Option</label>
-</div>
-<div style="position:absolute;top:-40px;left:120px;">
-<input type="radio" name="option1" id="option2" class="radio"/ onclick="EngageChoice(2)">
-<label for="option2" id="opt2">Second Option</label>
-</div>
-
-<div style="position:absolute;top:10px;left:-120px;">
-<input type="radio" name="option1" id="option3" class="radio"/ onclick="EngageChoice(3)">
-<label for="option3" id="opt3">Third Option</label>
-</div>
-
-<div style="position:absolute;top:10px;left:120px;">
-<input type="radio" name="option1" id="option4" class="radio"/ onclick="EngageChoice(4)">
-<label for="option4" id="opt4">Fourth Option</label>
-</div>
-</div>  
+    <div class="news-text" id="news-text" style="position:absolute;top:-50px;">
+ <p>
+ <ul>
+ <li>AT&T and Time Warner merger</li>
+<li>Russia and US relations continue to tense over Syria</li>
+ <li>Amazon rolls out their ISP in NA and EU</li>
+ </ul>
+ </p>
+ </div>
 </div>
 <div id="main-container" style="position:absolute;width:100%;height:100%;">
  <div class="radio-toolbar" align="center" style="width:100%;height:auto;">  
@@ -192,8 +192,37 @@ Networks in Anthropocene
 
 
 </div>
+
   <div id="container1" style="position:relative;width:100%;height:100%;background:#0283f4;">
- 
+
+   <div class="turn-count" id="turn-count" style="position:absolute;top:0%;right:45%;width:10%;height:10%;">
+   2016
+   </div>
+  <div class="desc-text" style="position:absolute;top:340px;width:15%;height:160px;opacity:0.6;">
+  <div id="all-options" style="position:absolute;top:-20px;left:150px;width:100%;height:100%;">
+      <div style="position:absolute;top:20px;left:-150px;width:100%;height:100%;">
+<input type="radio" name="option1" id="option1" class="radio" checked/ onclick="EngageChoice(1)">
+<label for="option1" id="opt1">First Option</label>
+</div>
+<div style="position:absolute;top:50px;left:-150px;">
+<input type="radio" name="option1" id="option2" class="radio"/ onclick="EngageChoice(2)">
+<label for="option2" id="opt2">Second Option</label>
+</div>
+
+<div style="position:absolute;top:80px;left:-150px;">
+<input type="radio" name="option1" id="option3" class="radio"/ onclick="EngageChoice(3)">
+<label for="option3" id="opt3">Third Option</label>
+</div>
+
+<div style="position:absolute;top:110px;left:-150px;">
+<input type="radio" name="option1" id="option4" class="radio"/ onclick="EngageChoice(4)">
+<label for="option4" id="opt4">Fourth Option</label>
+</div>
+</div>
+<div class="desc-text" id="opt-desc" align="center" style="position:absolute;top:160px;width:100%;height:260px;opacity:1;">
+SOMETHING HAPPENS OKAYSOMETHING HAPPENS OKAYSOMETHING HAPPENS OKAYSOMETHING HAPPENS OKAY
+</div>
+  </div>
   </div>
  
   </div>
@@ -256,6 +285,7 @@ Networks in Anthropocene
 </svg>
      
      <script>
+
 var carbondata =[['ABW',413.0355512536],
 ['AND',0],
 ['AFG',18168.8632027705],
@@ -997,15 +1027,117 @@ election.arc([
   origin:'SOM',
   destination:'TZA'
 },
+ //south-atlantic-inter-link-sail
   {
-    origin: 'BRA',
-    destination: 'USA',
-      options: {
-        strokeWidth: 20,
-        strokeColor: 'rgba(100, 10, 200, 0.4)',
-        greatArc: true
-      }
+    origin:'BRA',
+    destination: 'CMR'
   },
+  //pacific-light-cable-network
+  {
+    origin: 'USA',
+    destination: 'HKG'
+
+  },
+//australia-west-express-awe
+{
+
+  origin: 'DJI',
+  destination: 'AUS'
+
+},
+//pldt-domestic-fiber-optic-network-dfon
+{
+  origin: 'PHL',
+  destination: 'IDN'
+},
+//new-cross-pacific-ncp-cable-system
+{
+  origin: 'CHN',
+  destination: 'JPN'
+},
+{
+  origin: 'JPN',
+  destination: 'KOR'
+},
+{
+  origin:'KOR',
+  destination: 'USA'
+},
+
+//yellow
+{
+  origin: 'GBR',
+  destination: 'USA'
+},
+
+//trans-pacific-express-tpe-cable-system
+{
+   origin: 'CHN',
+  destination: 'KOR'
+},
+{
+  origin:'KOR',
+  destination:'JPN'
+
+},
+{
+ origin: 'CHN',
+  destination: 'USA'
+},
+
+//tata-tgn-tata-indicom
+{
+ origin: 'SGP',
+  destination: 'IND'
+},
+//tata-tgn-gulf
+{
+ origin: 'SAU',
+  destination: 'QAT'
+},
+{
+ origin: 'QAT',
+  destination: 'BHR'
+},
+//tangerine
+{
+ origin: 'GBR',
+  destination: 'BEL'
+},
+//tagide-2
+{
+ origin: 'PRT',
+  destination: 'FRA'
+},
+//south-atlantic-cable-system-sacs
+{
+ origin: 'BRA',
+  destination: 'AGO'
+},
+// silphium
+{
+ origin: 'GRC',
+  destination: 'LBY'
+},
+//seamewe-3
+{
+ origin: 'EGY',
+  destination: 'IDN'
+},
+//saudi-arabia-sudan-1-sas-1
+{
+ origin: 'SAU',
+  destination: 'SDN'
+},
+//lev-submarine-system
+{
+ origin: 'ITA',
+  destination: 'ISR'
+},
+{
+ origin: 'PRT',
+  destination: 'FRA'
+},
   {
       origin: {
           latitude: 40.639722,
@@ -1016,32 +1148,11 @@ election.arc([
           longitude: -122.375
       }
   },
-  {
-      origin: {
-          latitude: 30.194444,
-          longitude: -97.67
-      },
-      destination: {
-          latitude: 25.793333,
-          longitude: -80.290556
-      },
-      options: {
-        strokeWidth: 2,
-        strokeColor: 'rgba(100, 10, 200, 0.4)',
-        greatArc: true
-      }
-  },
-  {
-      origin: {
-          latitude: 39.861667,
-          longitude: -104.673056
-      },
-      destination: {
-          latitude: 35.877778,
-          longitude: -78.7875
-      }
-  }
-],  {strokeWidth: 1, arcSharpness: 1.4});
+  
+
+],  {strokeWidth: 1, arcSharpness: 1.4}
+
+);
 
 console.log(election.options);
 var turnCount=2016;
@@ -1049,8 +1160,7 @@ function changeOptions(countryName,map)
 {
   console.log("it's " + countryName);
   console.log( document.getElementById('option1').children );
- document.getElementById('opt1').innerHTML = "Attempt to expand the bandwidth";
-  document.getElementById('opt2').innerHTML = "Attempt to expand the bandwidth";
+  DisplayChoices();
 
 }
 
@@ -1058,6 +1168,7 @@ function advanceTurn()
 {
 
   turnCount++;
+  console.log(turnCount);
   document.getElementById("turn-count").innerHTML=turnCount;
   updateDataValues();
 }
@@ -1078,6 +1189,7 @@ function ShowNetwork()
   selectionString='Network Connectivity in ';
 election.updateChoropleth(null, {reset: true});
  election.updateChoropleth(net_dataset);
+ DisplayChoices(1);
 }
 
 function ShowEmissions()
@@ -1086,11 +1198,30 @@ currentSelection=2;
 selectionString='Greenhouse Emissions from ';
 election.updateChoropleth(null, {reset: true});
 election.updateChoropleth(carbon_dataset);
+ DisplayChoices(2);
 }
 
 function ShowConsumption()
 {
+ DisplayChoices(3);
+}
 
+function DisplayChoices(dataview)
+{
+if(dataview==1)
+{
+ document.getElementById('opt1').innerHTML = "Hasten as-is 5G Implementation";
+  document.getElementById('opt2').innerHTML = "Exploit unused and unlicensed spectrum";
+  document.getElementById('opt3').innerHTML = "Enhance spectral efficiency";
+  document.getElementById('opt4').innerHTML = "Improve frequency reuse";
+}
+else if(dataview==2)
+{
+ document.getElementById('opt1').innerHTML = "Stop any coal mining";
+  document.getElementById('opt2').innerHTML = "";
+  document.getElementById('opt3').innerHTML = "Enhance spectral efficiency";
+  document.getElementById('opt4').innerHTML = "Improve frequency reuse";
+}
 }
 
 function EngageChoice(choice)
@@ -1098,10 +1229,20 @@ function EngageChoice(choice)
   if(choice==1)
   {
     console.log("1st");
+     document.getElementById('opt-desc').innerHTML = "Currently, the 5G rollout will not be fully complete until 2030 globally. This will make sure it is put on priority-track."
   }
   else if(choice==2)
   {
     console.log("2nd");
+    document.getElementById('opt-desc').innerHTML = "5G will increase energy usage 10x globally, so it might be a wiser idea to exploit the unlicensed spectrum and scaffold current Wi-Fi spectrum devices to 5G than changing drastically."
+  }
+  else if(choice==3)
+  {
+document.getElementById('opt-desc').innerHTML = "Deploy massive number of antennas to allow M-MIMO(Multiple Input Multiple Output). Potential multiplexing while escalating power consumption of Radio Frequency chains"
+  }
+  else if(choice==4)
+  {
+    document.getElementById('opt-desc').innerHTML = "Reduce the transmitter-receiver distance by constructing Ultra Dense Networks(UDNs) and allowing Device2Device communications to reduce inter-cell interference"
   }
 }
 //resizing 
@@ -1115,5 +1256,10 @@ election.updateChoropleth({
    CHN: '#0283f4'
 });
   */ 
+
+
+  //initial
+     ShowNetwork();
+     EngageChoice(1);
      </script>
 </body>
