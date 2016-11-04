@@ -816,6 +816,8 @@ var carbon_dataset = {};
 var net_dataset={};
 selectionString="";
 
+var net_impactScore=10;
+var carbon_impactScore=13;
 var currentSelection=0; //0 for none, 1 for network, 2 for emissions and 3 for consumption
 
 var onlyValues = carbondata.map(function(obj){ return obj[1]; });
@@ -931,33 +933,6 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
             }
         }
       })
-      var bombs = [{
-        name: 'Joe 4',
-        radius: 25,
-        country: 'USSR',
-        significance: 'First fusion weapon test by the USSR (not "staged")',
-        date: '1953-08-12',
-        latitude: 50.07,
-        longitude: 78.43
-      },{
-        name: 'RDS-37',
-        radius: 40,
-        country: 'USSR',
-        significance: 'First "staged" thermonuclear weapon test by the USSR (deployable)',
-        latitude: 50.07,
-        longitude: 78.43
-
-      },{
-        name: 'Tsar Bomba',
-        radius: 75,
-        country: 'USSR',
-        fillKey: 'RUS',
-        significance: 'Largest thermonuclear weapon ever tested—scaled down from its initial 100 Mt design by 50%',
-        date: '1961-10-31',
-        latitude: 73.482,
-        longitude: 54.5854
-      }
-    ];
     var notbombs = [];
 
     /*{
@@ -972,7 +947,7 @@ var onlyValues = carbondata.map(function(obj){ return obj[1]; });
       */
     //draw bubbles for bombs
 
-election.bubbles(bombs, {
+election.bubbles(notbombs, {
     popupTemplate: function (geo, data) {
             return ['<div class="hoverinfo">' +  data.name,
             '<br/>Payload: ' +  data.yield + ' kilotons',
@@ -1164,7 +1139,7 @@ function changeOptions(countryName,map)
 
 
 //net dataset size is 265
-function globalEffect(factor)
+function globalEffect(netfactor,carbonfactor)
 {
   var i=0;
   var paletteScale = d3.scale.linear()
@@ -1174,7 +1149,7 @@ function globalEffect(factor)
   {
     //console.log(key);
 
-    var newValue=net_dataset[key].numberOfThings*factor;
+    var newValue=net_dataset[key].numberOfThings*netfactor;
     if(newValue<100)
     {
     net_dataset[key].numberOfThings=newValue;
@@ -1187,7 +1162,7 @@ function globalEffect(factor)
   {
     //console.log(key);
 
-    var newValue=carbon_dataset[key].numberOfThings*factor;
+    var newValue=carbon_dataset[key].numberOfThings*carbonfactor;
 
     carbon_dataset[key].numberOfThings=newValue;
     carbon_dataset[key].fillColor=paletteScaleCarbon(newValue);
@@ -1199,6 +1174,7 @@ function advanceTurn()
 {
 
   turnCount++;
+  updateNews();
   election.bubbles(notbombs,{
     popupTemplate: function (geo, data) {
             return ['<div class="hoverinfo">' +  data.name,
@@ -1215,24 +1191,33 @@ function advanceTurn()
 
 function updateDataValues()
 {
-  var factor=1*Math.random();
+  var netfactor=net_impactScore;
+  var carbonfactor =carbon_impactScore;
   //update arcs and cables
   updateBubbles();
   updateCables();
- globalEffect(1.1);
+ globalEffect(net_impactScore,carbon_impactScore);
 }
 
+var possibleEvents=['Cyclone','Landing points hit','Colocation Place Damaged'];
+var possibleEventDesc=['power and network outage in region', 'access to region affected','coastal places facing adverse weather threats'];
 function updateBubbles()
 {
   console.log("updating bubbles");
+
+        var uniqueEvent=Math.floor((Math.random() * possibleEvents.length) + 1);
   //create a sample arc to push first
+  if(Math.random()>0.5)
+  {
+    notbombs=[];
+  }
   notbombs.push(
 {
-        name: 'Joe 4',
-        radius: 125,
-        significance: 'Something happened heere',
-        latitude: 25.07,
-        longitude: 58.43
+        name: possibleEvents[uniqueEvent],
+        radius: Math.floor((Math.random() * 125) + 1),
+        significance: possibleEventDesc[uniqueEvent],
+        latitude: Math.floor((Math.random() * 110) + (Math.random() * -110)),
+        longitude: Math.floor((Math.random() * 61) + (Math.random() * -30))
       });
 
   //then update it
@@ -1245,12 +1230,14 @@ function updateBubbles()
 });
 }
 
+
 function updateCables()
 {
 
   //create a sample cable to push first
-  cables.push({ origin:'CHN', destination:'ZAF'});
-  election.arc(cables);
+  //console.log(countryCodes[0]);
+ cables.push({ origin:countryCodes[(Math.floor((Math.random() * 10) + 1))], destination:countryCodes[Math.floor((Math.random() * 10) + 1)]});
+ election.arc(cables);
 }
 
 function ShowNetwork()
@@ -1271,11 +1258,29 @@ election.updateChoropleth(carbon_dataset);
 }
 
 var choices=["Hasten as-is 5G Implementation","Exploit unused and unlicensed spectrum","Phase out coal mines",
-"Provide subsidies to Calyx and non-profit ISPs","Pass Carbon Tax","Improve frequency reuse"];
+"Provide subsidies to non-profit ISPs","Pass Carbon Tax","Improve frequency reuse",
+"Wi-Fi channel sensing and backoff","Announce per capita electric threshold", "Listen Before Talk for LTE devices",
+"Random cellular network size","Expand tax credits for energy efficiency plan","Legislate cognitive electric usage adapters",
+"Subsidize Platform Cooperatives","Adopt microgrids as a backup","Phase out carbon-emitting cars by next decade",
+"Legislate the Carry Your Data plan","Subsidize installation of remote microgrids", "Incentivize neighborhood microgrids",
+"Implement free space quantum networks","Implement fibre optic based quantum networks", "Deploy signal buoys",
+"Legislate Energy Tax", "Announce fines for exceeding energy threshold",  "Regulate Spectrum Use" , 
+"Expand Neighborhood Commons", "Improve frequency reuse", "Regulate Spectrum Use",
+
+
+];
 
 var choiceDesc=["Currently, the 5G rollout will not be fully complete until 2030 globally. This will make sure it is put on priority-track.","5G will increase energy usage 10x globally, so it might be a wiser idea to exploit the unlicensed spectrum and scaffold current Wi-Fi spectrum devices to 5G than changing drastically.","Stop search for any more coal and eventually phase out the mines over few decades at risk of increasing dissent among those whose livelihood depend upon coal industry",
 "To promote public-interest work, provide subsidies to Calyx and similar ISPs managed by non-profits","Tax industries and motorists causing carbon emissions, it will likely reduce emissions at cost of economic unrest.","Reduce the transmitter-receiver distance by constructing Ultra Dense Networks(UDNs) and allowing Device2Device communications to reduce inter-cell interference",
-]
+"Introduced mandatorily in Wi-Fi devices to temporarily vacate channels and minimize inter-device interference that are trying to access same channels","Verifies if channel is occupied by WiFi devices before transmitting, thus preventing any unnecessary interference and reducing power wastage","Legislate a per person monthly restriction on the electricity consumption in KWh. This would currently just include personal, household and office devices.",
+"using stochastic geometry theory to reduce energy usage due to moving between cells","To provide rapid adoption of energy efficient operations, federal tax credits offered to public and private institutions including schools, offices.","To limit the consumption, ConEd and other electric providers will be using cognitive electric usage adapters that sense daily use pattern and optimize electric efficiency without affecting operation of devices",
+"In order to compete with “sharing economy” giants like Airbnb, Uber, platform cooperatives have risen to bridge the gap between labour and market and these subsidies aim to ensure they will be able to face the competition", "To be adopted in neighborhoods in coastal cities that are prone to heavy cyclonic activity, decentralized microgrids will be utilized as backups for electric infrastructure in case of a blackout. These microgrids will be built on top of existing work done by groups in many cities and will encourage residents to suggest local solutions", "by phasing them out by 2031, it will reduce one major source of carbon emissions.",
+"The law aims to protect citizens data by allowing them to carry their own data across sites, and possibly store it in their private home servers. This legislation enforces companies and data service providers to transform their sites so that any requests will have to query the data on their home server","To secure potential issues caused by the Point of Common Coupling (PCC), remote microgrids help decentralize the microgrids even more","Sharing of benefits of microgrids within your neighborhood and to make sure the infrastructure is decentralized not into individual remote grids but collective clusters shared by people who share interests by the virtue of being neighbours.",
+"Rely on line-of-sight and support higher transmission rates than fibre-optic","Can be built on existing fibre-optic cable infrastructure and can be used to send both quantum and non-quantum control signals", "With increasing mistrust on megacorporations like Amazon, Google, Huawei, TATA, Vodafone owning majority of submarine cables, using connected signal buoys has emerged as popular option to enable cross-continent wireless transmission at reduced speeds. This will likely increase the chances of less data crossing land-ocean boundaries to control the effect on latency.",
+"In order to reinforce neighborhoods from disintegrating, a commons of equipment and community-contributed entertainment media accounts will be available at local public library", "Reduce the transmitter-receiver distance by constructing Ultra Dense Networks(UDNs) and allowing Device2Device communications to reduce inter-cell interference", "With increasing security threats, regulate spectrum misuse to ensure all “bad actors” are prevented from misusing spectrum for illegal activities",
+];
+
+
 function DisplayChoices()
 {
  document.getElementById('opt1').innerHTML = choices[(turnCount-2017)*3];
@@ -1289,18 +1294,54 @@ function EngageChoice(choice)
   if(choice==1)
   {
     console.log("1st");
+    net_impactScore=1.02;
+    carbon_impactScore=1.02;
      document.getElementById('opt-desc').innerHTML = choiceDesc[(turnCount-2017)*3];
   }
   else if(choice==2)
   {
     console.log("2nd");
+    net_impactScore=1.1;
+    carbon_impactScore=0.8;
     document.getElementById('opt-desc').innerHTML = choiceDesc[(turnCount-2017)*3+1];
   }
   else if(choice==3)
   {
+    net_impactScore=1.05
+    carbon_impactScore=0.98;
 document.getElementById('opt-desc').innerHTML = choiceDesc[(turnCount-2017)*3+2];
   }
 }
+
+
+var news=['AT&T and Time Warner merger', 'Russia and US relations continue to tense over Syria', 'Amazon rolls out their ISP in NA and EU',
+'Mirai DDOSing causes Internet blackout for weeks', 'New Affirmation of Agreements charted between ICANN and multi-state body','Google and Facebook launch their ISPs in Asia and Africa',
+'Self-driving car rollout halted by botnet attacks','Tor vulnerability results in exodus to alternate Onion routers','Mesh network groups in different cities win federal innovation grants',
+'IoT ban in official spaces legislated','Major banks adopt blockchains citing exceeding security concerns','Amazon and their Web Service to offer premium rewards to users of their ISP',
+'Federal lawsuit against telecom companies for rating', 'ICANN’s new TLD-expansion program sparks concern','China announces solar-powered cities in their next Five Year Plan', 'New York Times goes fully digital',
+'Torrential weather hits coastal infrastructure across Asia','Dispute between Indian states over ongoing water crisis','Quantum cryptography becoming the to-go standard','Anti-surveillance fashion goes mainstream','Increasing solar radiation affecting wireless spectrum', 
+
+]
+
+/*
+ <p>
+Highlights of the Year
+ <ul>
+ <li>AT&T and Time Warner merger</li>
+<li>Russia and US relations continue to tense over Syria</li>
+ <li>Amazon rolls out their ISP in NA and EU</li>
+ </ul>
+ </p>
+ */
+
+function updateNews()
+{
+
+  document.getElementById('news-text').innerHTML= "<p>Highlights of the Year<ul><li>"+news[(turnCount-2017)*3]+"</li><li>"+news[(turnCount-2017)*3+1]+"</li><li>"+news[(turnCount-2017)*3+2]+"</li></ul></p>";
+
+}
+
+
 //resizing 
 window.addEventListener('resize', function() {
         election.resize();
@@ -1317,5 +1358,270 @@ election.updateChoropleth({
   //initial
      ShowNetwork();
      EngageChoice(1);
+     var countryCodes=['ABW',
+'AND',
+'AFG',
+'AGO',
+'ALB',
+'ARB',
+'ARE',
+'ARG',
+'ARM',
+'ASM',
+'ATG',
+'AUS',
+'AUT',
+'AZE',
+'BDI',
+'BEL',
+'BEN',
+'BFA',
+'BGD',
+'BGR',
+'BHR',
+'BHS',
+'BIH',
+'BLR',
+'BLZ',
+'BMU',
+'BOL',
+'BRA',
+'BRB',
+'BRN',
+'BTN',
+'BWA',
+'CAF',
+'CAN',
+'CEB',
+'CHE',
+'CHI',
+'CHL',
+'CHN',
+'CIV',
+'CMR',
+'COG',
+'COL',
+'COM',
+'CPV',
+'CRI',
+'CSS',
+'CUB',
+'CUW',
+'CYM',
+'CYP',
+'CZE',
+'DEU',
+'DJI',
+'DMA',
+'DNK',
+'DOM',
+'DZA',
+'EAP',
+'EAR',
+'EAS',
+'ECA',
+'ECS',
+'ECU',
+'EGY',
+'EMU',
+'ERI',
+'ESP',
+'EST',
+'ETH',
+'EUU',
+'FCS',
+'FIN',
+'FJI',
+'FRA',
+'FRO',
+'FSM',
+'GAB',
+'GBR',
+'GEO',
+'GHA',
+'GIB',
+'GIN',
+'GMB',
+'GNB',
+'GNQ',
+'GRC',
+'GRD',
+'GRL',
+'GTM',
+'GUM',
+'GUY',
+'HIC',
+'HKG',
+'HND',
+'HPC',
+'HRV',
+'HTI',
+'HUN',
+'IBD',
+'IBT',
+'IDA',
+'IDB',
+'IDN',
+'IDX',
+'IMN',
+'IND',
+'INX',
+'IRL',
+'IRN',
+'IRQ',
+'ISL',
+'ISR',
+'ITA',
+'JAM',
+'JOR',
+'JPN',
+'KAZ',
+'KEN',
+'KGZ',
+'KHM',
+'KIR',
+'KNA',
+'KOR',
+'KSV',
+'KWT',
+'LAC',
+'LAO',
+'LBN',
+'LBR',
+'LBY',
+'LCA',
+'LCN',
+'LDC',
+'LIC',
+'LIE',
+'LKA',
+'LMC',
+'LMY',
+'LSO',
+'LTE',
+'LTU',
+'LUX',
+'LVA',
+'MAC',
+'MAF',
+'MAR',
+'MCO',
+'MDA',
+'MDG',
+'MDV',
+'MEA',
+'MEX',
+'MHL',
+'MIC',
+'MKD',
+'MLI',
+'MLT',
+'MMR',
+'MNA',
+'MNE',
+'MNG',
+'MNP',
+'MOZ',
+'MRT',
+'MUS',
+'MWI',
+'MYS',
+'NAC',
+'NAM',
+'NCL',
+'NER',
+'NGA',
+'NIC',
+'NLD',
+'NOR',
+'NPL',
+'NRU',
+'NZL',
+'OED',
+'OMN',
+'OSS',
+'PAK',
+'PAN',
+'PER',
+'PHL',
+'PLW',
+'PNG',
+'POL',
+'PRE',
+'PRI',
+'PRK',
+'PRT',
+'PRY',
+'PSS',
+'PST',
+'PYF',
+'QAT',
+'ROU',
+'RUS',
+'RWA',
+'SAS',
+'SAU',
+'SDN',
+'SEN',
+'SGP',
+'SLB',
+'SLE',
+'SLV',
+'SMR',
+'SOM',
+'SRB',
+'SSA',
+'SSD',
+'SSF',
+'SST',
+'STP',
+'SUR',
+'SVK',
+'SVN',
+'SWE',
+'SWZ',
+'SXM',
+'SYC',
+'SYR',
+'TCA',
+'TCD',
+'TEA',
+'TEC',
+'TGO',
+'THA',
+'TJK',
+'TKM',
+'TLA',
+'TMN',
+'TLS',
+'TON',
+'TSA',
+'TSS',
+'TTO',
+'TUN',
+'TUR',
+'TUV',
+'TZA',
+'UGA',
+'UKR',
+'UMC',
+'URY',
+'USA',
+'UZB',
+'VCT',
+'VEN',
+'VGB',
+'VIR',
+'VNM',
+'VUT',
+'PSE',
+'WLD',
+'WSM',
+'YEM',
+'ZAF',
+'COD',
+'ZMB',
+'ZWE',
+];
      </script>
 </body>
